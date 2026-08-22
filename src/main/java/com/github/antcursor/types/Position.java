@@ -2,6 +2,7 @@ package com.github.antcursor.types;
 
 /**
  * Position
+ * 0,0 being the up-left corner
  */
 public record Position(int rank, int file) {
   @Override
