@@ -2,7 +2,7 @@ package com.github.antcursor.board;
 
 import com.github.antcursor.pieces.Piece;
 import com.github.antcursor.types.Color;
-import com.github.antcursor.types.Move;
+import com.github.antcursor.pieces.move.Move;
 
 /**
  * Board

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.github.antcursor.board.Board;
 import com.github.antcursor.types.Color;
-import com.github.antcursor.types.Move;
+import com.github.antcursor.pieces.move.Move;
 import com.github.antcursor.types.Position;
 
 public class ChessGame {

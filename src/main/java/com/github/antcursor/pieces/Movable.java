@@ -2,7 +2,7 @@ package com.github.antcursor.pieces;
 
 import java.util.List;
 
-import com.github.antcursor.types.Move;
+import com.github.antcursor.pieces.move.Move;
 import com.github.antcursor.types.Position;
 
 /**

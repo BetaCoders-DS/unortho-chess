@@ -1,6 +1,7 @@
-package com.github.antcursor.types;
+package com.github.antcursor.pieces.move;
 
 import com.github.antcursor.pieces.Piece;
+import com.github.antcursor.types.Position;
 
 /**
  * Move

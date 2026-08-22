@@ -1,4 +1,4 @@
-package com.github.antcursor.types;
+package com.github.antcursor.pieces.move;
 
 /**
  * MoveType
