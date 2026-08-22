@@ -96,7 +96,7 @@ public abstract class Piece implements Movable {
     }
   }
 
-  public Color getColor() {
+  public Color color() {
     return color;
   }
 }
