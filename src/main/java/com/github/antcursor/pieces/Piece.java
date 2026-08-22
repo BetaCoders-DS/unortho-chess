@@ -3,13 +3,14 @@ package com.github.antcursor.pieces;
 import java.util.List;
 
 import com.github.antcursor.pieces.move.MoveCandidate;
+import com.github.antcursor.types.Color;
 import com.github.antcursor.types.Position;
 
 /**
  * Piece
  */
 public abstract class Piece implements Movable {
-  // TODO: implement piece and its childs
+  private Color color;
 
   public class King extends Piece {
     @Override
@@ -93,5 +94,9 @@ public abstract class Piece implements Movable {
       // TODO: implement method
 
     }
+  }
+
+  public Color getColor() {
+    return color;
   }
 }
