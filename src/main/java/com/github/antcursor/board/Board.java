@@ -2,14 +2,14 @@ package com.github.antcursor.board;
 
 import com.github.antcursor.pieces.Piece;
 import com.github.antcursor.types.Color;
-import com.github.antcursor.pieces.move.Move;
+import com.github.antcursor.pieces.move.MoveCandidate;
 
 /**
  * Board
  */
 public record Board(Piece[][] grid, int files, int ranks) {
   // TODO: implement Board
-  public boolean isLegalMove(Move move) {
+  public boolean isLegalMove(MoveCandidate move) {
     // TODO: implement method
     return false;
   }
@@ -19,7 +19,7 @@ public record Board(Piece[][] grid, int files, int ranks) {
     return false;
   }
 
-  public void makeMove(Move move) {
+  public void makeMove(MoveCandidate move) {
     // TODO: implement method
   }
 

@@ -5,13 +5,13 @@ import java.util.List;
 
 import com.github.antcursor.board.Board;
 import com.github.antcursor.types.Color;
-import com.github.antcursor.pieces.move.Move;
+import com.github.antcursor.pieces.move.MoveCandidate;
 import com.github.antcursor.types.Position;
 
 public class ChessGame {
   private Board board;
   private Color turn;
-  private List<Move> moveHistory;
+  private List<MoveCandidate> moveHistory;
 
   public ChessGame() {
     this.board = new Board();
@@ -19,12 +19,12 @@ public class ChessGame {
     this.moveHistory = new ArrayList<>();
   }
 
-  public List<Move> getPossibleMoves(Position pos) {
+  public List<MoveCandidate> getPossibleMoves(Position pos) {
     // TODO: implement method
     return null;
   }
 
-  public boolean tryMove(Move move) {
+  public boolean tryMove(MoveCandidate move) {
     // TODO: implement method
     return false;
   }

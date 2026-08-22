@@ -2,7 +2,7 @@ package com.github.antcursor.pieces;
 
 import java.util.List;
 
-import com.github.antcursor.pieces.move.Move;
+import com.github.antcursor.pieces.move.MoveCandidate;
 import com.github.antcursor.types.Position;
 
 /**
@@ -10,7 +10,7 @@ import com.github.antcursor.types.Position;
  */
 public interface Movable {
 
-  public List<Move> getLegalMoves(Piece[][] grid, Position pos);
+  public List<MoveCandidate> getLegalMoves(Piece[][] grid, Position pos);
 
-  public void move(Move move);
+  public void move(MoveCandidate move);
 }

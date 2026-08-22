@@ -2,7 +2,7 @@ package com.github.antcursor.pieces;
 
 import java.util.List;
 
-import com.github.antcursor.pieces.move.Move;
+import com.github.antcursor.pieces.move.MoveCandidate;
 import com.github.antcursor.types.Position;
 
 /**
@@ -13,13 +13,13 @@ public abstract class Piece implements Movable {
 
   public class King extends Piece {
     @Override
-    public List<Move> getLegalMoves(Piece[][] grid, Position pos) {
+    public List<MoveCandidate> getLegalMoves(Piece[][] grid, Position pos) {
       // TODO: implement method
       return null;
     }
 
     @Override
-    public void move(Move move) {
+    public void move(MoveCandidate move) {
       // TODO: implement method
 
     }
@@ -27,13 +27,13 @@ public abstract class Piece implements Movable {
 
   public class Queen extends Piece {
     @Override
-    public List<Move> getLegalMoves(Piece[][] grid, Position pos) {
+    public List<MoveCandidate> getLegalMoves(Piece[][] grid, Position pos) {
       // TODO: implement method
       return null;
     }
 
     @Override
-    public void move(Move move) {
+    public void move(MoveCandidate move) {
       // TODO: implement method
 
     }
@@ -41,13 +41,13 @@ public abstract class Piece implements Movable {
 
   public class Rook extends Piece {
     @Override
-    public List<Move> getLegalMoves(Piece[][] grid, Position pos) {
+    public List<MoveCandidate> getLegalMoves(Piece[][] grid, Position pos) {
       // TODO: implement method
       return null;
     }
 
     @Override
-    public void move(Move move) {
+    public void move(MoveCandidate move) {
       // TODO: implement method
 
     }
@@ -55,13 +55,13 @@ public abstract class Piece implements Movable {
 
   public class Bishop extends Piece {
     @Override
-    public List<Move> getLegalMoves(Piece[][] grid, Position pos) {
+    public List<MoveCandidate> getLegalMoves(Piece[][] grid, Position pos) {
       // TODO: implement method
       return null;
     }
 
     @Override
-    public void move(Move move) {
+    public void move(MoveCandidate move) {
       // TODO: implement method
 
     }
@@ -69,13 +69,13 @@ public abstract class Piece implements Movable {
 
   public class Knight extends Piece {
     @Override
-    public List<Move> getLegalMoves(Piece[][] grid, Position pos) {
+    public List<MoveCandidate> getLegalMoves(Piece[][] grid, Position pos) {
       // TODO: implement method
       return null;
     }
 
     @Override
-    public void move(Move move) {
+    public void move(MoveCandidate move) {
       // TODO: implement method
 
     }
@@ -83,13 +83,13 @@ public abstract class Piece implements Movable {
 
   public class Pawn extends Piece {
     @Override
-    public List<Move> getLegalMoves(Piece[][] grid, Position pos) {
+    public List<MoveCandidate> getLegalMoves(Piece[][] grid, Position pos) {
       // TODO: implement method
       return null;
     }
 
     @Override
-    public void move(Move move) {
+    public void move(MoveCandidate move) {
       // TODO: implement method
 
     }
