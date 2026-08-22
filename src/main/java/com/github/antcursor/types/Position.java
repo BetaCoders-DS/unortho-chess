@@ -15,4 +15,15 @@ public record Position(int rank, int file) {
 
     return this.rank() == pos.rank() && this.file() == pos.file();
   }
+
+  public static Position behind(Position pos, Color pieceColor) {
+    switch (pieceColor) {
+      case WHITE:
+        return new Position(pos.rank + 1, pos.file);
+      case BLACK:
+        return new Position(pos.rank - 1, pos.file);
+      default:
+        return null;
+    }
+  }
 }
