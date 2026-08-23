@@ -24,6 +24,6 @@ public sealed interface MoveType {
   public record CastleQueen() implements MoveType {
   }
 
-  public record Promotion(PieceType promotedTo, Optional<PieceType> captured) {
+  public record Promotion(PieceType promotedTo, Optional<PieceType> captured) implements MoveType {
   }
 }
