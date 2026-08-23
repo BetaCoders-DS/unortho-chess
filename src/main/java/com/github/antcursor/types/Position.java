@@ -27,6 +27,17 @@ public record Position(int x, int y) {
     }
   }
 
+  public Position front(Color pieceColor) {
+    switch (pieceColor) {
+      case WHITE:
+        return new Position(x, y - 1);
+      case BLACK:
+        return new Position(x, y + 1);
+      default:
+        return null;
+    }
+  }
+
   public Position addDirection(Direction dir) {
     return new Position(x() + dir.dx(), y() + dir.dy());
   }
