@@ -29,7 +29,7 @@ public record Board(Piece[][] grid, int files, int ranks) {
     return null;
   }
 
-  public Piece gPiece(Position pos) {
+  public Piece getPiece(Position pos) {
     return grid[pos.y()][pos.x()];
   }
 }
