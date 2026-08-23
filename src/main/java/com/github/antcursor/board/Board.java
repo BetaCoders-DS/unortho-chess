@@ -13,12 +13,18 @@ public class Board {
   private final int files;
   private final int ranks;
 
+  private Position enPassantTarget;
+
   public int ranks() {
     return ranks;
   }
 
   public int files() {
     return files;
+  }
+
+  public Position enPassantTarget() {
+    return enPassantTarget;
   }
 
   public Board() {
