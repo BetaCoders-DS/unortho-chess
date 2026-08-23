@@ -7,8 +7,8 @@ import com.github.antcursor.board.Board;
 import com.github.antcursor.pieces.Piece;
 import com.github.antcursor.pieces.move.PieceMovement.PawnMovement;
 import com.github.antcursor.pieces.move.PieceMovement.SimpleMovement;
-import com.github.antcursor.pieces.move.PieceMovement.SimpleMovement.Direction;
 import com.github.antcursor.types.Position;
+import com.github.antcursor.types.Direction;
 
 /**
  * MoveGenerator
@@ -51,6 +51,7 @@ public class MoveGenerator {
         }
       }
       case PawnMovement pm -> {
+
       }
     }
 

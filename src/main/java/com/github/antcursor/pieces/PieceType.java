@@ -3,7 +3,7 @@ package com.github.antcursor.pieces;
 import java.util.List;
 
 import com.github.antcursor.pieces.move.PieceMovement;
-import com.github.antcursor.pieces.move.PieceMovement.SimpleMovement.Direction;
+import com.github.antcursor.types.Direction;
 
 /**
  * PieceType

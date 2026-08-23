@@ -1,7 +1,5 @@
 package com.github.antcursor.types;
 
-import com.github.antcursor.pieces.move.PieceMovement.SimpleMovement.Direction;
-
 /**
  * Position
  * 0,0 being the up-left corner
