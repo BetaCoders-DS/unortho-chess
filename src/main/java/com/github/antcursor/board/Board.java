@@ -32,4 +32,9 @@ public record Board(Piece[][] grid, int files, int ranks) {
   public Piece getPiece(Position pos) {
     return grid[pos.y()][pos.x()];
   }
+
+  public boolean isOnBoard(Position pos) {
+    return (pos.x() < files && pos.x() >= 0)
+        && (pos.y() < ranks && pos.y() >= 0);
+  }
 }
