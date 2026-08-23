@@ -16,12 +16,12 @@ public record Position(int x, int y) {
     return this.y() == pos.y() && this.x() == pos.x();
   }
 
-  public static Position behind(Position pos, Color pieceColor) {
+  public Position behind(Color pieceColor) {
     switch (pieceColor) {
       case WHITE:
-        return new Position(pos.x, pos.y + 1);
+        return new Position(x, y + 1);
       case BLACK:
-        return new Position(pos.x, pos.y - 1);
+        return new Position(x, y - 1);
       default:
         return null;
     }
