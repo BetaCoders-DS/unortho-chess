@@ -26,4 +26,12 @@ public record Position(int rank, int file) {
         return null;
     }
   }
+
+  public int x() {
+    return file;
+  }
+
+  public int y() {
+    return rank;
+  }
 }

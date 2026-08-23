@@ -2,6 +2,7 @@ package com.github.antcursor.board;
 
 import com.github.antcursor.pieces.Piece;
 import com.github.antcursor.types.Color;
+import com.github.antcursor.types.Position;
 import com.github.antcursor.pieces.move.MoveRequest;
 
 /**
@@ -26,5 +27,9 @@ public record Board(Piece[][] grid, int files, int ranks) {
   public char[][] getFENBoard() {
     // TODO: implement method
     return null;
+  }
+
+  public Piece gPiece(Position pos) {
+    return grid[pos.y()][pos.x()];
   }
 }
