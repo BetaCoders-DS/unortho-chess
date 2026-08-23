@@ -8,19 +8,43 @@ import com.github.antcursor.pieces.move.MoveRequest;
 /**
  * Board
  */
-public record Board(Piece[][] grid, int files, int ranks) {
+public class Board {
+  private final Piece[][] grid;
+  private final int files;
+  private final int ranks;
+
+  public int ranks() {
+    return ranks;
+  }
+
+  public int files() {
+    return files;
+  }
+
+  public Board() {
+    files = 8;
+    ranks = 8;
+    grid = new Piece[ranks][files];
+  }
+
+  public Board(int files, int ranks) {
+    this.files = files;
+    this.ranks = ranks;
+    grid = new Piece[ranks][files];
+  }
+
   // TODO: implement Board
-  public boolean isLegalMove(MoveRequest move) {
+  public boolean isLegalMove(final MoveRequest move) {
     // TODO: implement method
     return false;
   }
 
-  public boolean isInCheck(Color color) {
+  public boolean isInCheck(final Color color) {
     // TODO: implement method
     return false;
   }
 
-  public void makeMove(MoveRequest move) {
+  public void makeMove(final MoveRequest move) {
     // TODO: implement method
   }
 
@@ -29,11 +53,11 @@ public record Board(Piece[][] grid, int files, int ranks) {
     return null;
   }
 
-  public Piece getPiece(Position pos) {
+  public Piece getPiece(final Position pos) {
     return grid[pos.y()][pos.x()];
   }
 
-  public boolean isOnBoard(Position pos) {
+  public boolean isOnBoard(final Position pos) {
     return (pos.x() < files && pos.x() >= 0)
         && (pos.y() < ranks && pos.y() >= 0);
   }
