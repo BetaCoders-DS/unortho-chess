@@ -1,5 +1,7 @@
 package com.github.antcursor.types;
 
+import com.github.antcursor.pieces.move.PieceMovement.SimpleMovement.Direction;
+
 /**
  * Position
  * 0,0 being the up-left corner
@@ -25,6 +27,10 @@ public record Position(int rank, int file) {
       default:
         return null;
     }
+  }
+
+  public Position addDirection(Direction dir) {
+    return new Position(rank() + dir.dy(), file() + dir.dx());
   }
 
   public int x() {
