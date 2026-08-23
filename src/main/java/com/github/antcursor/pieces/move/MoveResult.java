@@ -7,11 +7,12 @@ import com.github.antcursor.types.Position;
  * MoveResult
  */
 public record MoveResult(
-    MoveRequest request,
+    Position from,
+    Position to,
     MoveType type,
     Piece movedPiece) {
 
   public Position capturedPosition() {
-    return type instanceof MoveType.EnPassant ep ? ep.capturePos() : request.to();
+    return type instanceof MoveType.EnPassant ep ? ep.capturePos() : to();
   }
 }
