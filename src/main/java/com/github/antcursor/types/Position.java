@@ -4,7 +4,7 @@ package com.github.antcursor.types;
  * Position
  * 0,0 being the up-left corner
  */
-public record Position(int rank, int file) {
+public record Position(int x, int y) {
   @Override
   public boolean equals(Object other) {
     if (other == this)
@@ -13,29 +13,21 @@ public record Position(int rank, int file) {
     if (!(other instanceof Position pos))
       return false;
 
-    return this.rank() == pos.rank() && this.file() == pos.file();
+    return this.y() == pos.y() && this.x() == pos.x();
   }
 
   public static Position behind(Position pos, Color pieceColor) {
     switch (pieceColor) {
       case WHITE:
-        return new Position(pos.rank + 1, pos.file);
+        return new Position(pos.x, pos.y + 1);
       case BLACK:
-        return new Position(pos.rank - 1, pos.file);
+        return new Position(pos.x, pos.y - 1);
       default:
         return null;
     }
   }
 
   public Position addDirection(Direction dir) {
-    return new Position(rank() + dir.dy(), file() + dir.dx());
-  }
-
-  public int x() {
-    return file;
-  }
-
-  public int y() {
-    return rank;
+    return new Position(x() + dir.dx(), y() + dir.dy());
   }
 }
