@@ -38,6 +38,17 @@ public record Position(int x, int y) {
     }
   }
 
+  public int colorRelativeRank(Color pieceColor, int nRanks) {
+    switch (pieceColor) {
+      case WHITE:
+        return nRanks - y - 1;
+      case BLACK:
+        return y;
+      default:
+        throw new UnknownError();
+    }
+  }
+
   public Position addDirection(Direction dir) {
     return new Position(x() + dir.dx(), y() + dir.dy());
   }
