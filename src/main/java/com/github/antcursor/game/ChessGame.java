@@ -15,6 +15,10 @@ public class ChessGame {
   private Color turn;
   private List<MoveResult> moveHistory;
 
+  public char[][] getFENBoard(){
+    return board.getFENBoard();
+  }
+
   public ChessGame() {
     this.board = new Board();
     this.turn = Color.WHITE;
@@ -22,12 +26,28 @@ public class ChessGame {
   }
 
   public List<MoveCandidate> getPossibleMoves(Position pos) {
-    // TODO: implement method
-    return null;
+    
+    Piece piece = board.getPiece(pos);
+
+    if (piece == null || piece.color() != turn) {
+      return List.of();
+      }
+
+      return MoveGenerator.from(board, pos);
   }
 
   public boolean tryMove(MoveRequest move) {
-    // TODO: implement method
-    return false;
+    if(!board.isLegalMove(move)) {
+      return false;
+    }
+
+    Piece piece = board.getPiece(move.from());
+    Piece capturedPiece = board.getPiece(move.to());
+
+    board.makeMove(move);
+    moveHistory.add(new MoveResult(move, piece, capturedPiece));
+
+    turn = (turn == Color.WHITE) ? Color.BLACK : Color.WHITE;
+    return true;
   }
 }
