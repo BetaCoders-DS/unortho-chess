@@ -13,15 +13,17 @@ public class ProcessingRenderer implements RenderI {
 
   private final int boardSize;
   private final Position boardPos;
-  public ColorScheme colorScheme = new ColorScheme();
+  public ColorScheme colorScheme;
 
-  public ProcessingRenderer(PApplet sketch) {
+  public ProcessingRenderer(PApplet sketch, ColorScheme colorScheme) {
     this.sketch = sketch;
     this.boardSize = sketch.height - (sketch.height / 5);
 
     int offsety = sketch.height - this.boardSize;
     int offsetx = sketch.width - this.boardSize;
     this.boardPos = new Position(offsetx / 2, offsety / 2);
+
+    this.colorScheme = colorScheme;
   }
 
   @Override
@@ -56,7 +58,7 @@ public class ProcessingRenderer implements RenderI {
     sketch.pop();
   }
 
-  public class ColorScheme {
+  public static class ColorScheme {
     public int darkSquaresColor = 0xff9C7759;
     public int lightSquaresColor = 0xffCFBB9E;
   }
