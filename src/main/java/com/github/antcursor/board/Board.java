@@ -164,8 +164,16 @@ public class Board {
   }
 
   private char toFenChar(Piece piece) {
-    // TODO: implement
-    return ' ';
+    char base = switch (piece.type()) {
+      case PAWN -> 'p';
+      case KNIGHT -> 'n';
+      case BISHOP -> 'b';
+      case ROOK -> 'r';
+      case QUEEN -> 'q';
+      case KING -> 'k';
+      case NONE -> '.';
+    };
+    return piece.color() == Color.WHITE ? Character.toUpperCase(base) : base;
   }
 
   private void applyMove(MoveCandidate candidate, Piece piece, MoveRequest move) {
