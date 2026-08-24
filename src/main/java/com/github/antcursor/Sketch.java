@@ -1,5 +1,9 @@
 package com.github.antcursor;
 
+import com.github.antcursor.game.ChessGame;
+import com.github.antcursor.render.ProcessingRenderer;
+import com.github.antcursor.render.RenderI;
+
 import processing.core.PApplet;
 
 /**
@@ -7,6 +11,8 @@ import processing.core.PApplet;
  */
 class Sketch extends PApplet {
   private Config config;
+  private RenderI renderer;
+  private ChessGame game = new ChessGame();
 
   Sketch(Config cfg) {
     config = cfg;
@@ -19,13 +25,12 @@ class Sketch extends PApplet {
 
   @Override
   public void setup() {
-    // TODO Auto-generated method stub
-    super.setup();
+    renderer = new ProcessingRenderer(this);
+
   }
 
   @Override
   public void draw() {
-    // TODO Auto-generated method stub
-    super.draw();
+    renderer.render(game);
   }
 }

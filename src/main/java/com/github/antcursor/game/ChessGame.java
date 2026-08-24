@@ -30,4 +30,8 @@ public class ChessGame {
     // TODO: implement method
     return false;
   }
+
+  public Board board() {
+    return board;
+  };
 }
