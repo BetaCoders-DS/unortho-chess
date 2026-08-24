@@ -1,10 +1,10 @@
 package com.github.antcursor.render;
 
-import com.github.antcursor.board.Board;
+import com.github.antcursor.game.ChessGame;
 
 /**
  * RenderI
  */
 public interface RenderI {
-  public void render(Board board);
+  public void render(ChessGame game);
 }

@@ -1,6 +1,6 @@
 package com.github.antcursor.render;
 
-import com.github.antcursor.board.Board;
+import com.github.antcursor.game.ChessGame;
 
 import processing.core.PApplet;
 
@@ -15,6 +15,6 @@ public class ProcessingRenderer implements RenderI {
   }
 
   @Override
-  public void render(Board board) {
+  public void render(ChessGame game) {
   }
 }
