@@ -1,10 +1,16 @@
 package com.github.antcursor.board;
 
+import java.util.List;
+
 import com.github.antcursor.pieces.Piece;
 import com.github.antcursor.types.Color;
 import com.github.antcursor.types.Position;
 import com.github.antcursor.pieces.move.MoveRequest;
 import com.github.antcursor.pieces.move.MoveCandidate;
+import com.github.antcursor.pieces.move.MoveType;
+import com.github.antcursor.pieces.move.MoveGenerator;
+import com.github.antcursor.pieces.PieceType;
+import com.github.antcursor.pieces.IllegalMoveException;
 
 /**
  * Board
@@ -64,10 +70,11 @@ public class Board {
 
   private MoveCandidate findCandidate(MoveRequest move) {
     List<MoveCandidate> candidates = MoveGenerator.from(move.from(), this);
-    if(candidates == null) return null;
+    if (candidates == null)
+      return null;
 
     for (MoveCandidate candidate : candidates) {
-      if(candidate.to().equals(move.to())) {
+      if (candidate.to().equals(move.to())) {
         return candidate;
       }
     }
@@ -76,14 +83,16 @@ public class Board {
 
   public boolean isLegalMove(final MoveRequest move) {
     Piece piece = getPiece(move.from());
-    if(piece == null) return false;
+    if (piece == null)
+      return false;
 
-    MoveCandidate candidate == findCandidate(move);
-    if(candidate == null) return false;
+    MoveCandidate candidate = findCandidate(move);
+    if (candidate == null)
+      return false;
 
     Board simulated = new Board(cloneGrid(), files, ranks);
     simulated.applyMove(candidate, piece, move);
- 
+
     return !simulated.isInCheck(piece.color());
   }
 
@@ -103,13 +112,16 @@ public class Board {
     for (int y = 0; y < ranks; ++y) {
       for (int x = 0; x < files; ++x) {
         Piece piece = grid[y][x];
-        if (piece == null || piece.color() != byColor) continue;
- 
+        if (piece == null || piece.color() != byColor)
+          continue;
+
         List<MoveCandidate> candidates = MoveGenerator.from(new Position(x, y), this);
-        if (candidates == null) continue;
+        if (candidates == null)
+          continue;
 
         for (MoveCandidate candidate : candidates) {
-          if (candidate.to().equals(target)) return true;
+          if (candidate.to().equals(target))
+            return true;
         }
       }
     }
@@ -122,7 +134,7 @@ public class Board {
 
   public boolean isInCheck(final Color color) {
     Position kingPos = findKing(color);
-    
+
     return isSquareAttacked(kingPos, opposite(color));
   }
 
@@ -140,18 +152,23 @@ public class Board {
 
   public char[][] getFENBoard() {
     char[][] fen = new char[ranks][files];
- 
+
     for (int y = 0; y < ranks; y++) {
       for (int x = 0; x < files; x++) {
         Piece piece = grid[y][x];
         fen[y][x] = (piece == null) ? '.' : toFenChar(piece);
       }
     }
- 
+
     return fen;
   }
 
-    private void applyMove(MoveCandidate candidate, Piece piece, MoveRequest move) {
+  private char toFenChar(Piece piece) {
+    // TODO: implement
+    return ' ';
+  }
+
+  private void applyMove(MoveCandidate candidate, Piece piece, MoveRequest move) {
     switch (candidate.type()) {
       case MoveType.Normal normal -> {
         setPiece(move.to(), piece);
@@ -173,8 +190,8 @@ public class Board {
         setPiece(move.to(), piece);
         setPiece(move.from(), null);
         int rank = move.from().y();
-        Position rookFrom = new Position(files-1, rank);
-        Position rookTo = new Position(move.to().x()-1, rank);
+        Position rookFrom = new Position(files - 1, rank);
+        Position rookTo = new Position(move.to().x() - 1, rank);
         Piece rook = getPiece(rookFrom);
         setPiece(rookFrom, null);
         setPiece(rookTo, rook);
@@ -185,7 +202,7 @@ public class Board {
         setPiece(move.from(), null);
         int rank = move.from().y();
         Position rookFrom = new Position(0, rank);
-        Position rookTo = new Position(move.to().x()+1, rank);
+        Position rookTo = new Position(move.to().x() + 1, rank);
         Piece rook = getPiece(rookFrom);
         setPiece(rookFrom, null);
         setPiece(rookTo, rook);
@@ -201,10 +218,9 @@ public class Board {
   private void updateEnPassantTarget(Piece piece, MoveRequest move) {
     boolean twoSquarePawnMove = piece.type() == PieceType.PAWN
         && Math.abs(move.to().y() - move.from().y()) == 2;
- 
+
     enPassantTarget = twoSquarePawnMove ? move.to().behind(piece.color()) : null;
   }
-
 
   public boolean isOnBoard(final Position pos) {
     return (pos.x() < files && pos.x() >= 0)
