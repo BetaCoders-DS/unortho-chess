@@ -28,21 +28,27 @@ public class ProcessingRenderer implements RenderI {
 
   @Override
   public void render(ChessGame game) {
-    drawEmptyBoard(game.board().files(), game.board().ranks());
+    drawEmptyBoard(game);
   }
 
-  private void drawEmptyBoard(int nFiles, int nRanks) {
+  private void drawEmptyBoard(ChessGame game) {
+    int nFiles = game.board().files();
+    int nRanks = game.board().ranks();
+
     sketch.push();
     sketch.noStroke();
 
     float squareLen = boardSize / Math.min(nFiles, nRanks);
     int init_color = colorScheme.lightSquaresColor;
 
-    for (int r = 0; r < squareLen * nRanks; r += squareLen) {
+    for (int r = 0; r < nRanks; ++r) {
       int color = init_color;
-      for (int f = 0; f < squareLen * nFiles; f += squareLen) {
+      for (int f = 0; f < nFiles; ++f) {
         sketch.fill(color);
-        sketch.square(boardPos.x() + f, boardPos.y() + r, squareLen);
+        sketch.square(
+            boardPos.x() + f * squareLen,
+            boardPos.y() + r * squareLen,
+            squareLen);
 
         if (color == colorScheme.lightSquaresColor)
           color = colorScheme.darkSquaresColor;
