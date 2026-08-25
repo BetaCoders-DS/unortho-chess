@@ -39,27 +39,17 @@ public class ProcessingRenderer implements RenderI {
     sketch.noStroke();
 
     float squareLen = boardSize / Math.min(nFiles, nRanks);
-    int init_color = colorScheme.lightSquaresColor;
 
-    for (int r = 0; r < nRanks; ++r) {
-      int color = init_color;
+    for (int r = 0; r < nRanks; ++r)
       for (int f = 0; f < nFiles; ++f) {
+        int color = (r + f) % 2 == 0 ? colorScheme.lightSquaresColor : colorScheme.darkSquaresColor;
         sketch.fill(color);
         sketch.square(
             boardPos.x() + f * squareLen,
             boardPos.y() + r * squareLen,
             squareLen);
 
-        if (color == colorScheme.lightSquaresColor)
-          color = colorScheme.darkSquaresColor;
-        else
-          color = colorScheme.lightSquaresColor;
       }
-      if (init_color == colorScheme.lightSquaresColor)
-        init_color = colorScheme.darkSquaresColor;
-      else
-        init_color = colorScheme.lightSquaresColor;
-    }
 
     sketch.pop();
   }
