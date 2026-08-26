@@ -93,4 +93,15 @@ public class ChessGame {
       state = (turn == Color.WHITE) ? GameState.WHITE_TURN : GameState.BLACK_TURN;
     }
   }
+
+  public boolean undoMove() {
+    if (moveHistory.isEmpty())
+      return false;
+
+    MoveResult last = moveHistory.remove(moveHistory.size() - 1);
+    board.undoMove(last);
+    turn = opposite(turn);
+    updateGameState();
+    return true;
+  }
 }

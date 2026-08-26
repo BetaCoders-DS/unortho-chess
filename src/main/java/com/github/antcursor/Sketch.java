@@ -104,4 +104,11 @@ class Sketch extends PApplet {
     Piece piece = game.board().getPiece(clicked);
     selected = (piece != null && piece.color() == game.turn()) ? clicked : null;
   }
+
+  @Override
+  public void keyPressed() {
+    switch (key) {
+      case 'u' -> game.undoMove();
+    }
+  }
 }

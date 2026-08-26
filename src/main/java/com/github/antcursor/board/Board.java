@@ -205,14 +205,75 @@ public class Board {
 
   public MoveResult makeMove(final MoveRequest move) {
     Piece piece = getPiece(move.from());
-    Piece captured = getPiece(move.to());
     MoveCandidate candidate = findCandidate(move);
+
+    Piece captured = getPiece(move.to());
+    if (candidate.type() instanceof MoveType.EnPassant ep) {
+      captured = getPiece(ep.capturePos());
+    }
+
+    Position prevEP = enPassantTarget;
+    boolean prevWK = whiteCanCastleKingSide;
+    boolean prevWQ = whiteCanCastleQueenSide;
+    boolean prevBK = blackCanCastleKingSide;
+    boolean prevBQ = blackCanCastleQueenSide;
 
     applyMove(candidate, piece, move);
     updateEnPassantTarget(piece, move);
     updateCastlingRights(piece, move, captured);
 
-    return new MoveResult(move.from(), move.to(), candidate.type(), piece);
+    return new MoveResult(move.from(), move.to(), candidate.type(), piece, captured,
+        prevEP, prevWK, prevWQ, prevBK, prevBQ);
+  }
+
+  public void undoMove(MoveResult result) {
+    Piece piece = result.movedPiece();
+
+    switch (result.type()) {
+      case MoveType.Normal n -> {
+        setPiece(result.from(), piece);
+        setPiece(result.to(), null);
+      }
+      case MoveType.Capture c -> {
+        setPiece(result.from(), piece);
+        setPiece(result.to(), result.capturedPiece());
+      }
+      case MoveType.EnPassant ep -> {
+        setPiece(result.from(), piece);
+        setPiece(result.to(), null);
+        setPiece(ep.capturePos(), result.capturedPiece());
+      }
+      case MoveType.CastleKing ck -> {
+        setPiece(result.from(), piece);
+        setPiece(result.to(), null);
+        int rank = result.from().y();
+        Position rookFrom = new Position(files - 1, rank);
+        Position rookTo = new Position(result.to().x() - 1, rank);
+        Piece rook = getPiece(rookTo);
+        setPiece(rookTo, null);
+        setPiece(rookFrom, rook);
+      }
+      case MoveType.CastleQueen cq -> {
+        setPiece(result.from(), piece);
+        setPiece(result.to(), null);
+        int rank = result.from().y();
+        Position rookFrom = new Position(0, rank);
+        Position rookTo = new Position(result.to().x() + 1, rank);
+        Piece rook = getPiece(rookTo);
+        setPiece(rookTo, null);
+        setPiece(rookFrom, rook);
+      }
+      case MoveType.Promotion p -> {
+        setPiece(result.from(), piece);
+        setPiece(result.to(), p.captured().isPresent() ? result.capturedPiece() : null);
+      }
+    }
+
+    enPassantTarget = result.prevEnPassantTarget();
+    whiteCanCastleKingSide = result.prevWhiteKingSide();
+    whiteCanCastleQueenSide = result.prevWhiteQueenSide();
+    blackCanCastleKingSide = result.prevBlackKingSide();
+    blackCanCastleQueenSide = result.prevBlackQueenSide();
   }
 
   private int homeRank(Color color) {
