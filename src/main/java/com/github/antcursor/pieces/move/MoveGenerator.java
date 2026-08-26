@@ -31,6 +31,46 @@ public class MoveGenerator {
     }
   }
 
+  public static List<MoveCandidate> castlingMoves(Color color, Position kingPos, Board board) {
+    List<MoveCandidate> moves = new ArrayList<>();
+    Color opp = color == Color.WHITE ? Color.BLACK : Color.WHITE;
+
+    if (board.isSquareAttacked(kingPos, opp))
+      return moves; // king in check, no castle
+
+    int rank = kingPos.y();
+    int kx = kingPos.x();
+
+    if (board.canCastleKingSide(color)) {
+      int rookX = board.files() - 1;
+      if (emptyBetween(board, rank, kx + 1, rookX - 1)
+          && pathSafe(board, opp, rank, kx, kx + 2)) {
+        moves.add(new MoveCandidate(kingPos, new Position(kx + 2, rank), new MoveType.CastleKing()));
+      }
+    }
+    if (board.canCastleQueenSide(color)) {
+      if (emptyBetween(board, rank, 1, kx - 1)
+          && pathSafe(board, opp, rank, kx - 2, kx)) {
+        moves.add(new MoveCandidate(kingPos, new Position(kx - 2, rank), new MoveType.CastleQueen()));
+      }
+    }
+    return moves;
+  }
+
+  private static boolean emptyBetween(Board board, int rank, int fromX, int toX) {
+    for (int x = fromX; x <= toX; x++)
+      if (board.getPiece(new Position(x, rank)) != null)
+        return false;
+    return true;
+  }
+
+  private static boolean pathSafe(Board board, Color opp, int rank, int fromX, int toX) {
+    for (int x = fromX; x <= toX; x++)
+      if (board.isSquareAttacked(new Position(x, rank), opp))
+        return false;
+    return true;
+  }
+
   private static List<MoveCandidate> simpleMoves(SimpleMovement sp, Color color, Position pos, Board board) {
     List<MoveCandidate> moves = new ArrayList<>();
 

@@ -1,9 +1,9 @@
 package com.github.antcursor.board;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.io.IOException;
 import java.nio.file.Path;
 
 import com.github.antcursor.pieces.Piece;
@@ -85,12 +85,20 @@ public class Board {
     return copy;
   }
 
+  private List<MoveCandidate> allCandidates(Position pos, Piece piece) {
+    List<MoveCandidate> candidates = new ArrayList<>(MoveGenerator.from(pos, this));
+    if (piece.type() == PieceType.KING) {
+      candidates.addAll(MoveGenerator.castlingMoves(piece.color(), pos, this));
+    }
+    return candidates;
+  }
+
   private MoveCandidate findCandidate(MoveRequest move) {
-    List<MoveCandidate> candidates = MoveGenerator.from(move.from(), this);
-    if (candidates == null)
+    Piece piece = getPiece(move.from());
+    if (piece == null)
       return null;
 
-    for (MoveCandidate candidate : candidates) {
+    for (MoveCandidate candidate : allCandidates(move.from(), piece)) {
       if (candidate.to().equals(move.to())) {
         return candidate;
       }
@@ -144,12 +152,8 @@ public class Board {
     if (piece == null)
       return List.of();
 
-    List<MoveCandidate> candidates = MoveGenerator.from(pos, this);
-    if (candidates == null)
-      return List.of();
-
     List<MoveCandidate> legalMoves = new ArrayList<>();
-    for (MoveCandidate candidate : candidates) {
+    for (MoveCandidate candidate : allCandidates(pos, piece)) {
       if (!wouldLeaveKingInCheck(candidate, piece, pos)) {
         legalMoves.add(candidate);
       }
@@ -169,7 +173,7 @@ public class Board {
     return null;
   }
 
-  private boolean isSquareAttacked(Position target, Color byColor) {
+  public boolean isSquareAttacked(Position target, Color byColor) {
     for (int y = 0; y < ranks; ++y) {
       for (int x = 0; x < files; ++x) {
         Piece piece = grid[y][x];
