@@ -65,7 +65,18 @@ class Sketch extends PApplet {
 
   @Override
   public void draw() {
-    renderer.render(game);
+    switch (game.getState()) {
+      case CHECKMATE:
+        this.exit();
+
+      case DRAW:
+      case BLACK_TURN:
+      case WHITE_TURN:
+        renderer.render(game);
+        break;
+
+      case NONE:
+    }
   }
 
   @Override
