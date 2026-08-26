@@ -58,6 +58,21 @@ public class ChessGame {
     return true;
   }
 
+  public Board board() {
+    return board;
+  };
+
+  public static final char[][] defaultBoard = {
+      { 'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r' },
+      { 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p' },
+      { '.', '.', '.', '.', '.', '.', '.', '.' },
+      { '.', '.', '.', '.', '.', '.', '.', '.' },
+      { '.', '.', '.', '.', '.', '.', '.', '.' },
+      { '.', '.', '.', '.', '.', '.', '.', '.' },
+      { 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P' },
+      { 'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R' },
+  };
+
   private boolean isGameOver() {
     return state == GameState.CHECKMATE || state == GameState.DRAW;
   }

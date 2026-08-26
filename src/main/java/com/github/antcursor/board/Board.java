@@ -18,9 +18,9 @@ import com.github.antcursor.pieces.move.MoveResult;
  * Board
  */
 public class Board {
-  private final Piece[][] grid;
-  private final int files;
-  private final int ranks;
+  private Piece[][] grid;
+  private int files;
+  private int ranks;
 
   private Position enPassantTarget;
 
@@ -264,6 +264,53 @@ public class Board {
     return fen;
   }
 
+  public void fromFEN(char[][] fen) {
+    int ranks = fen.length;
+    int files = fen[0].length;
+
+    this.ranks = ranks;
+    this.files = files;
+
+    this.grid = new Piece[ranks][files];
+
+    for (int r = 0; r < ranks; ++r)
+      for (int f = 0; f < files; ++f) {
+        char c = fen[r][f];
+        Color color = Character.isUpperCase(c) ? Color.WHITE : Color.BLACK;
+
+        c = Character.toUpperCase(c);
+        PieceType type;
+        switch (c) {
+          case 'P' -> type = PieceType.PAWN;
+          case 'N' -> type = PieceType.KNIGHT;
+          case 'B' -> type = PieceType.BISHOP;
+          case 'R' -> type = PieceType.ROOK;
+          case 'Q' -> type = PieceType.QUEEN;
+          case 'K' -> type = PieceType.KING;
+          default -> type = null;
+        }
+
+        if (type == null)
+          this.grid[r][f] = null;
+        else
+          this.grid[r][f] = new Piece(color, type);
+      }
+
+  }
+
+  private char toFenChar(Piece piece) {
+    char base = switch (piece.type()) {
+      case PAWN -> 'p';
+      case KNIGHT -> 'n';
+      case BISHOP -> 'b';
+      case ROOK -> 'r';
+      case QUEEN -> 'q';
+      case KING -> 'k';
+      case NONE -> '.';
+    };
+    return piece.color() == Color.WHITE ? Character.toUpperCase(base) : base;
+  }
+
   private void applyMove(MoveCandidate candidate, Piece piece, MoveRequest move) {
     switch (candidate.type()) {
       case MoveType.Normal normal -> {
@@ -321,18 +368,5 @@ public class Board {
   public boolean isOnBoard(final Position pos) {
     return (pos.x() < files && pos.x() >= 0)
         && (pos.y() < ranks && pos.y() >= 0);
-  }
-
-  private char toFenChar(Piece piece) {
-    char base = switch (piece.type()) {
-      case PAWN -> 'p';
-      case KNIGHT -> 'n';
-      case BISHOP -> 'b';
-      case ROOK -> 'r';
-      case QUEEN -> 'q';
-      case KING -> 'k';
-      case NONE -> '.';
-    };
-    return piece.color() == Color.WHITE ? Character.toUpperCase(base) : base;
   }
 }
