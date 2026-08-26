@@ -116,6 +116,27 @@ public class Board {
     return !wouldLeaveKingInCheck(candidate, piece, move.from());
   }
 
+  public boolean hasLegalMoves(final Color color) {
+    for (int y = 0; y < ranks; ++y) {
+      for (int x = 0; x < files; ++x) {
+        Piece piece = grid[y][x];
+        if (piece == null || piece.color() != color)
+          continue;
+        if (!getLegalMoves(new Position(x, y)).isEmpty())
+          return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean isCheckmate(final Color color) {
+    return isInCheck(color) && !hasLegalMoves(color);
+  }
+
+  public boolean isStalemate(final Color color) {
+    return !isInCheck(color) && !hasLegalMoves(color);
+  }
+
   public List<MoveCandidate> getLegalMoves(final Position pos) {
     Piece piece = getPiece(pos);
     if (piece == null)
