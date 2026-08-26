@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.github.antcursor.board.Board;
+import com.github.antcursor.board.BoardCSVLoader;
 import com.github.antcursor.types.Color;
 import com.github.antcursor.types.GameState;
 import com.github.antcursor.pieces.move.MoveCandidate;
@@ -20,6 +21,7 @@ public class ChessGame {
   private Color turn;
   private GameState state;
   private List<MoveResult> moveHistory;
+  private char[][] startingPosition;
 
   public char[][] getFENBoard() {
     return board.getFENBoard();
@@ -65,12 +67,13 @@ public class ChessGame {
   private static final Path DEFAULT_BOARD_PATH = Paths.get("src/main/resources/boards", "classic.csv");
 
   public ChessGame() {
+    this(loadDefaultBoard());
+  }
+
+  public ChessGame(char[][] startingPosition) {
+    this.startingPosition = startingPosition;
     this.board = new Board();
-    try {
-      this.board.fromCSV(DEFAULT_BOARD_PATH);
-    } catch (IOException e) {
-      throw new RuntimeException("Failed to load default board: " + DEFAULT_BOARD_PATH, e);
-    }
+    this.board.fromFEN(startingPosition);
     this.turn = Color.WHITE;
     this.state = GameState.WHITE_TURN;
     this.moveHistory = new ArrayList<>();
@@ -103,5 +106,13 @@ public class ChessGame {
     turn = opposite(turn);
     updateGameState();
     return true;
+  }
+
+  private static char[][] loadDefaultBoard() {
+    try {
+      return BoardCSVLoader.load(DEFAULT_BOARD_PATH);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to load board " + DEFAULT_BOARD_PATH);
+    }
   }
 }
