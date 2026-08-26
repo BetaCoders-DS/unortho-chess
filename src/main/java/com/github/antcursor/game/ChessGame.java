@@ -33,6 +33,10 @@ public class ChessGame {
     return state;
   }
 
+  public Color turn() {
+    return turn;
+  }
+
   public List<MoveCandidate> getPossibleMoves(Position pos) {
     if (isGameOver())
       return List.of();
