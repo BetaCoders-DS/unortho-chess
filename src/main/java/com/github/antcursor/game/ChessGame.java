@@ -9,11 +9,16 @@ import com.github.antcursor.pieces.move.MoveCandidate;
 import com.github.antcursor.pieces.move.MoveRequest;
 import com.github.antcursor.pieces.move.MoveResult;
 import com.github.antcursor.types.Position;
+import com.github.antcursor.pieces.Piece;
 
 public class ChessGame {
   private Board board;
   private Color turn;
   private List<MoveResult> moveHistory;
+
+  public char[][] getFENBoard() {
+    return board.getFENBoard();
+  }
 
   public ChessGame() {
     this.board = new Board();
@@ -23,13 +28,25 @@ public class ChessGame {
   }
 
   public List<MoveCandidate> getPossibleMoves(Position pos) {
-    // TODO: implement method
-    return null;
+    Piece piece = board.getPiece(pos);
+
+    if (piece == null || piece.color() != turn) {
+      return List.of();
+    }
+
+    return board.getLegalMoves(pos);
   }
 
   public boolean tryMove(MoveRequest move) {
-    // TODO: implement method
-    return false;
+    if (!board.isLegalMove(move)) {
+      return false;
+    }
+
+    MoveResult result = board.makeMove(move);
+    moveHistory.add(result);
+
+    turn = (turn == Color.WHITE) ? Color.BLACK : Color.WHITE;
+    return true;
   }
 
   public Board board() {

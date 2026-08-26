@@ -1,16 +1,19 @@
 package com.github.antcursor.board;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.github.antcursor.pieces.IllegalMoveException;
 import com.github.antcursor.pieces.Piece;
+import com.github.antcursor.pieces.PieceType;
+import com.github.antcursor.pieces.move.MoveCandidate;
+import com.github.antcursor.pieces.move.MoveGenerator;
+import com.github.antcursor.pieces.move.MoveRequest;
+import com.github.antcursor.pieces.move.MoveType;
 import com.github.antcursor.types.Color;
 import com.github.antcursor.types.Position;
-import com.github.antcursor.pieces.move.MoveRequest;
-import com.github.antcursor.pieces.move.MoveCandidate;
-import com.github.antcursor.pieces.move.MoveType;
-import com.github.antcursor.pieces.move.MoveGenerator;
-import com.github.antcursor.pieces.PieceType;
-import com.github.antcursor.pieces.IllegalMoveException;
+import com.github.antcursor.pieces.move.MoveResult;
 
 /**
  * Board
@@ -22,6 +25,11 @@ public class Board {
 
   private Position enPassantTarget;
 
+  private boolean whiteCanCastleKingSide = true;
+  private boolean whiteCanCastleQueenSide = true;
+  private boolean blackCanCastleKingSide = true;
+  private boolean blackCanCastleQueenSide = true;
+
   public int ranks() {
     return ranks;
   }
@@ -32,6 +40,14 @@ public class Board {
 
   public Position enPassantTarget() {
     return enPassantTarget;
+  }
+
+  public boolean canCastleKingSide(Color color) {
+    return color == Color.WHITE ? whiteCanCastleKingSide : blackCanCastleKingSide;
+  }
+
+  public boolean canCastleQueenSide(Color color) {
+    return color == Color.WHITE ? whiteCanCastleQueenSide : blackCanCastleQueenSide;
   }
 
   public Piece getPiece(final Position pos) {
@@ -81,6 +97,14 @@ public class Board {
     return null;
   }
 
+  private boolean wouldLeaveKingInCheck(MoveCandidate candidate, Piece piece, Position from) {
+    MoveRequest simulatedRequest = new MoveRequest(from, candidate.to(), Optional.empty());
+    Board simulated = new Board(cloneGrid(), files, ranks);
+    simulated.applyMove(candidate, piece, simulatedRequest);
+
+    return simulated.isInCheck(piece.color());
+  }
+
   public boolean isLegalMove(final MoveRequest move) {
     Piece piece = getPiece(move.from());
     if (piece == null)
@@ -90,10 +114,25 @@ public class Board {
     if (candidate == null)
       return false;
 
-    Board simulated = new Board(cloneGrid(), files, ranks);
-    simulated.applyMove(candidate, piece, move);
+    return !wouldLeaveKingInCheck(candidate, piece, move.from());
+  }
 
-    return !simulated.isInCheck(piece.color());
+  public List<MoveCandidate> getLegalMoves(final Position pos) {
+    Piece piece = getPiece(pos);
+    if (piece == null)
+      return List.of();
+
+    List<MoveCandidate> candidates = MoveGenerator.from(pos, this);
+    if (candidates == null)
+      return List.of();
+
+    List<MoveCandidate> legalMoves = new ArrayList<>();
+    for (MoveCandidate candidate : candidates) {
+      if (!wouldLeaveKingInCheck(candidate, piece, pos)) {
+        legalMoves.add(candidate);
+      }
+    }
+    return legalMoves;
   }
 
   private Position findKing(Color color) {
@@ -138,23 +177,69 @@ public class Board {
     return isSquareAttacked(kingPos, opposite(color));
   }
 
-  public void makeMove(final MoveRequest move) {
+  public MoveResult makeMove(final MoveRequest move) {
     if (!isLegalMove(move)) {
-      throw new IllegalMoveException("" + move);
+      throw new IllegalMoveException("Movimento ilegal: " + move);
     }
 
     Piece piece = getPiece(move.from());
+    Piece captured = getPiece(move.to());
     MoveCandidate candidate = findCandidate(move);
 
     applyMove(candidate, piece, move);
     updateEnPassantTarget(piece, move);
+    updateCastlingRights(piece, move, captured);
+
+    return new MoveResult(move.from(), move.to(), candidate.type(), piece);
+  }
+
+  private int homeRank(Color color) {
+    return color == Color.WHITE ? ranks - 1 : 0;
+  }
+
+  private void setKingSideRight(Color color, boolean value) {
+    if (color == Color.WHITE)
+      whiteCanCastleKingSide = value;
+    else
+      blackCanCastleKingSide = value;
+  }
+
+  private void setQueenSideRight(Color color, boolean value) {
+    if (color == Color.WHITE)
+      whiteCanCastleQueenSide = value;
+    else
+      blackCanCastleQueenSide = value;
+  }
+
+  private void revokeRookSide(Color color, Position rookPos) {
+    if (rookPos.y() != homeRank(color))
+      return;
+
+    if (rookPos.x() == 0) {
+      setQueenSideRight(color, false);
+    } else if (rookPos.x() == files - 1) {
+      setKingSideRight(color, false);
+    }
+  }
+
+  private void updateCastlingRights(Piece piece, MoveRequest move, Piece captured) {
+    if (piece.type() == PieceType.KING) {
+      setKingSideRight(piece.color(), false);
+      setQueenSideRight(piece.color(), false);
+    } else if (piece.type() == PieceType.ROOK) {
+      revokeRookSide(piece.color(), move.from());
+    }
+
+    if (captured != null && captured.type() == PieceType.ROOK) {
+      revokeRookSide(captured.color(), move.to());
+    }
   }
 
   public char[][] getFENBoard() {
     char[][] fen = new char[ranks][files];
 
-    for (int y = 0; y < ranks; y++) {
-      for (int x = 0; x < files; x++) {
+    for (int y = 0; y < ranks; ++y) {
+      for (int x = 0; x < files; ++x) {
         Piece piece = grid[y][x];
         fen[y][x] = (piece == null) ? '.' : toFenChar(piece);
       }
