@@ -20,6 +20,7 @@ public class ChessGame {
 
   public ChessGame() {
     this.board = new Board();
+    this.board.fromFEN(defaultBoard);
     this.turn = Color.WHITE;
     this.state = GameState.WHITE_TURN;
     this.moveHistory = new ArrayList<>();
