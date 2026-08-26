@@ -15,7 +15,6 @@ import com.github.antcursor.types.Direction;
 
 /**
  * MoveGenerator
- * Generates move candidates, does not check legality.
  */
 public class MoveGenerator {
   public static List<MoveCandidate> from(Position position, Board board) {
@@ -36,7 +35,7 @@ public class MoveGenerator {
     Color opp = color == Color.WHITE ? Color.BLACK : Color.WHITE;
 
     if (board.isSquareAttacked(kingPos, opp))
-      return moves; // king in check, no castle
+      return moves;
 
     int rank = kingPos.y();
     int kx = kingPos.x();
