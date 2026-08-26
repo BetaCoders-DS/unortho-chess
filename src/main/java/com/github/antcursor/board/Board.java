@@ -13,6 +13,7 @@ import com.github.antcursor.pieces.move.MoveRequest;
 import com.github.antcursor.pieces.move.MoveType;
 import com.github.antcursor.types.Color;
 import com.github.antcursor.types.Position;
+import com.github.antcursor.pieces.move.MoveResult;
 
 /**
  * Board
@@ -85,7 +86,8 @@ public class Board {
 
   private MoveCandidate findCandidate(MoveRequest move) {
     List<MoveCandidate> candidates = MoveGenerator.from(move.from(), this);
-    if (candidates == null) return null;
+    if (candidates == null)
+      return null;
 
     for (MoveCandidate candidate : candidates) {
       if (candidate.to().equals(move.to())) {
@@ -105,20 +107,24 @@ public class Board {
 
   public boolean isLegalMove(final MoveRequest move) {
     Piece piece = getPiece(move.from());
-    if (piece == null) return false;
+    if (piece == null)
+      return false;
 
     MoveCandidate candidate = findCandidate(move);
-    if (candidate == null) return false;
+    if (candidate == null)
+      return false;
 
     return !wouldLeaveKingInCheck(candidate, piece, move.from());
   }
 
   public List<MoveCandidate> getLegalMoves(final Position pos) {
     Piece piece = getPiece(pos);
-    if (piece == null) return List.of();
+    if (piece == null)
+      return List.of();
 
     List<MoveCandidate> candidates = MoveGenerator.from(pos, this);
-    if (candidates == null) return List.of();
+    if (candidates == null)
+      return List.of();
 
     List<MoveCandidate> legalMoves = new ArrayList<>();
     for (MoveCandidate candidate : candidates) {
@@ -145,13 +151,16 @@ public class Board {
     for (int y = 0; y < ranks; ++y) {
       for (int x = 0; x < files; ++x) {
         Piece piece = grid[y][x];
-        if (piece == null || piece.color() != byColor) continue;
+        if (piece == null || piece.color() != byColor)
+          continue;
 
         List<MoveCandidate> candidates = MoveGenerator.from(new Position(x, y), this);
-        if (candidates == null) continue;
+        if (candidates == null)
+          continue;
 
         for (MoveCandidate candidate : candidates) {
-          if (candidate.to().equals(target)) return true;
+          if (candidate.to().equals(target))
+            return true;
         }
       }
     }
@@ -164,11 +173,11 @@ public class Board {
 
   public boolean isInCheck(final Color color) {
     Position kingPos = findKing(color);
-    
+
     return isSquareAttacked(kingPos, opposite(color));
   }
 
-  public void makeMove(final MoveRequest move) {
+  public MoveResult makeMove(final MoveRequest move) {
     if (!isLegalMove(move)) {
       throw new IllegalMoveException("Movimento ilegal: " + move);
     }
@@ -180,6 +189,8 @@ public class Board {
     applyMove(candidate, piece, move);
     updateEnPassantTarget(piece, move);
     updateCastlingRights(piece, move, captured);
+
+    return new MoveResult(move.from(), move.to(), candidate.type(), piece);
   }
 
   private int homeRank(Color color) {
@@ -187,17 +198,22 @@ public class Board {
   }
 
   private void setKingSideRight(Color color, boolean value) {
-    if (color == Color.WHITE) whiteCanCastleKingSide = value;
-    else blackCanCastleKingSide = value;
+    if (color == Color.WHITE)
+      whiteCanCastleKingSide = value;
+    else
+      blackCanCastleKingSide = value;
   }
 
   private void setQueenSideRight(Color color, boolean value) {
-    if (color == Color.WHITE) whiteCanCastleQueenSide = value;
-    else blackCanCastleQueenSide = value;
+    if (color == Color.WHITE)
+      whiteCanCastleQueenSide = value;
+    else
+      blackCanCastleQueenSide = value;
   }
 
   private void revokeRookSide(Color color, Position rookPos) {
-    if (rookPos.y() != homeRank(color)) return;
+    if (rookPos.y() != homeRank(color))
+      return;
 
     if (rookPos.x() == 0) {
       setQueenSideRight(color, false);
