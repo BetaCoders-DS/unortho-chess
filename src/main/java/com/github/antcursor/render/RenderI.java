@@ -7,7 +7,7 @@ import com.github.antcursor.types.Position;
  * RenderI
  */
 public interface RenderI {
-  public void render(ChessGame game);
+  public void render(ChessGame game, Position selected);
 
   public Position screenToBoard(float screenX, float screenY, ChessGame game);
 }

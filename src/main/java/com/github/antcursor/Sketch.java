@@ -72,7 +72,7 @@ class Sketch extends PApplet {
       case DRAW:
       case BLACK_TURN:
       case WHITE_TURN:
-        renderer.render(game);
+        renderer.render(game, selected);
         break;
 
       case NONE:
