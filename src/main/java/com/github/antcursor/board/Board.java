@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.github.antcursor.pieces.IllegalMoveException;
 import com.github.antcursor.pieces.Piece;
 import com.github.antcursor.pieces.PieceType;
 import com.github.antcursor.pieces.move.MoveCandidate;
@@ -178,10 +177,6 @@ public class Board {
   }
 
   public MoveResult makeMove(final MoveRequest move) {
-    if (!isLegalMove(move)) {
-      throw new IllegalMoveException("Movimento ilegal: " + move);
-    }
-
     Piece piece = getPiece(move.from());
     Piece captured = getPiece(move.to());
     MoveCandidate candidate = findCandidate(move);
