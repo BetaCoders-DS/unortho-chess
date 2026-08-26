@@ -9,9 +9,5 @@ import com.github.antcursor.types.Position;
 public interface RenderI {
   public void render(ChessGame game);
 
-  /**
-   * Maps a screen point to a board Position. Null if outside the board. Honors
-   * current flip.
-   */
   public Position screenToBoard(float screenX, float screenY, ChessGame game);
 }

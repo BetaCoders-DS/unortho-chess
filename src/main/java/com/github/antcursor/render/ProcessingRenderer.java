@@ -68,9 +68,6 @@ public class ProcessingRenderer implements RenderI {
     return (float) boardSize / Math.min(nFiles, nRanks);
   }
 
-  // screen (row,col), 0,0 top-left of grid <-> board Position. Flip mirrors both
-  // axes,
-  // so same formula converts either direction.
   private Position toBoardPosition(int screenRow, int screenCol, int nFiles, int nRanks, boolean flip) {
     int x = flip ? nFiles - 1 - screenCol : screenCol;
     int y = flip ? nRanks - 1 - screenRow : screenRow;

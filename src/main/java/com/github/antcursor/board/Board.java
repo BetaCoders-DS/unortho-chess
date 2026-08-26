@@ -3,6 +3,8 @@ package com.github.antcursor.board;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.io.IOException;
+import java.nio.file.Path;
 
 import com.github.antcursor.pieces.Piece;
 import com.github.antcursor.pieces.PieceType;
@@ -368,5 +370,9 @@ public class Board {
   public boolean isOnBoard(final Position pos) {
     return (pos.x() < files && pos.x() >= 0)
         && (pos.y() < ranks && pos.y() >= 0);
+  }
+
+  public void fromCSV(Path path) throws IOException {
+    fromFEN(BoardCSVLoader.load(path));
   }
 }

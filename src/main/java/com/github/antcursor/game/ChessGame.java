@@ -2,6 +2,9 @@ package com.github.antcursor.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.github.antcursor.board.Board;
 import com.github.antcursor.types.Color;
@@ -17,14 +20,6 @@ public class ChessGame {
   private Color turn;
   private GameState state;
   private List<MoveResult> moveHistory;
-
-  public ChessGame() {
-    this.board = new Board();
-    this.board.fromFEN(defaultBoard);
-    this.turn = Color.WHITE;
-    this.state = GameState.WHITE_TURN;
-    this.moveHistory = new ArrayList<>();
-  }
 
   public char[][] getFENBoard() {
     return board.getFENBoard();
@@ -67,16 +62,19 @@ public class ChessGame {
     return board;
   };
 
-  public static final char[][] defaultBoard = {
-      { 'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r' },
-      { 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p' },
-      { '.', '.', '.', '.', '.', '.', '.', '.' },
-      { '.', '.', '.', '.', '.', '.', '.', '.' },
-      { '.', '.', '.', '.', '.', '.', '.', '.' },
-      { '.', '.', '.', '.', '.', '.', '.', '.' },
-      { 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P' },
-      { 'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R' },
-  };
+  private static final Path DEFAULT_BOARD_PATH = Paths.get("src/main/resources/boards", "classic.csv");
+
+  public ChessGame() {
+    this.board = new Board();
+    try {
+      this.board.fromCSV(DEFAULT_BOARD_PATH);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to load default board: " + DEFAULT_BOARD_PATH, e);
+    }
+    this.turn = Color.WHITE;
+    this.state = GameState.WHITE_TURN;
+    this.moveHistory = new ArrayList<>();
+  }
 
   private boolean isGameOver() {
     return state == GameState.CHECKMATE || state == GameState.DRAW;
