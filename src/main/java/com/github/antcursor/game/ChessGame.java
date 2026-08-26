@@ -17,6 +17,7 @@ public class ChessGame {
 
   public ChessGame() {
     this.board = new Board();
+    this.board.fromFEN(defaultBoard);
     this.turn = Color.WHITE;
     this.moveHistory = new ArrayList<>();
   }
@@ -33,5 +34,16 @@ public class ChessGame {
 
   public Board board() {
     return board;
+  };
+
+  public static final char[][] defaultBoard = {
+      { 'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r' },
+      { 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p' },
+      { '.', '.', '.', '.', '.', '.', '.', '.' },
+      { '.', '.', '.', '.', '.', '.', '.', '.' },
+      { '.', '.', '.', '.', '.', '.', '.', '.' },
+      { '.', '.', '.', '.', '.', '.', '.', '.' },
+      { 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P' },
+      { 'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R' },
   };
 }

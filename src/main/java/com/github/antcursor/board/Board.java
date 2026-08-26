@@ -16,9 +16,9 @@ import com.github.antcursor.pieces.IllegalMoveException;
  * Board
  */
 public class Board {
-  private final Piece[][] grid;
-  private final int files;
-  private final int ranks;
+  private Piece[][] grid;
+  private int files;
+  private int ranks;
 
   private Position enPassantTarget;
 
@@ -161,6 +161,40 @@ public class Board {
     }
 
     return fen;
+  }
+
+  public void fromFEN(char[][] fen) {
+    int ranks = fen.length;
+    int files = fen[0].length;
+
+    this.ranks = ranks;
+    this.files = files;
+
+    this.grid = new Piece[ranks][files];
+
+    for (int r = 0; r < ranks; ++r)
+      for (int f = 0; f < files; ++f) {
+        char c = fen[r][f];
+        Color color = Character.isUpperCase(c) ? Color.WHITE : Color.BLACK;
+
+        c = Character.toUpperCase(c);
+        PieceType type;
+        switch (c) {
+          case 'P' -> type = PieceType.PAWN;
+          case 'N' -> type = PieceType.KNIGHT;
+          case 'B' -> type = PieceType.BISHOP;
+          case 'R' -> type = PieceType.ROOK;
+          case 'Q' -> type = PieceType.QUEEN;
+          case 'K' -> type = PieceType.KING;
+          default -> type = null;
+        }
+
+        if (type == null)
+          this.grid[r][f] = null;
+        else
+          this.grid[r][f] = new Piece(color, type);
+      }
+
   }
 
   private char toFenChar(Piece piece) {
